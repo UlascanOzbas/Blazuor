@@ -5,3 +5,38 @@
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+<br/>
+
+<div class="h-stack gap-2">
+    <BlazuorButton Text="Deneme 1" IconCssClass="bi bi-1-circle-fill" Outline="true" ButtonSize="@ButtonSizes.Lg" NavigateUrl="/Counter" />
+    <BlazuorButton Text="Deneme 1" IconCssClass="bi bi-1-circle-fill" Outline="true" ButtonSize="@ButtonSizes.Md" Click="Click" />
+    <BlazuorButton Text="Deneme 1" IconCssClass="bi bi-1-circle-fill" Outline="true" />
+    <BlazuorButton Text="Deneme 1" IconCssClass="bi bi-1-circle-fill" Outline="true" ButtonSize="@ButtonSizes.Sm" />
+</div>
+<div class="h-stack gap-2">
+    <BlazuorDropdown Text="Emrehan" Variant="@Variant.Warning" ButtonSize="ButtonSizes.Lg" UseCustomContent="true">
+        <DropdownMenuContent>
+            <div style="width: 1000px;">
+                <div>Deneme Ulaş</div>
+                <div>Deneme Görkem</div>
+            </div>
+        </DropdownMenuContent>
+    </BlazuorDropdown>
+    <BlazuorDropdown Text="Görkem" Variant="@Variant.Success">
+        <DropdownMenuContent>
+            <BlazuorDropdownItem Text="Deneme 1" IconCssClass="bi bi-1-circle-fill" NavigateUrl="/Counter" Disabled="true" />
+            <BlazuorDropdownItem Text="Deneme 2" IconCssClass="bi bi-2-circle-fill" Click="Click" Disabled="true" />
+            <BlazuorDropdownItem Text="Deneme 3" IconCssClass="bi bi-3-circle-fill" />
+            <BlazuorDropdownItem IsDivider="true" />
+            <BlazuorDropdownItem Text="Deneme 4" IconCssClass="bi bi-4-circle-fill" />
+        </DropdownMenuContent>
+    </BlazuorDropdown>
+</div>
+
+@code {
+    private void Click()
+    {
+        Console.WriteLine("Clicked");
+    }
+}

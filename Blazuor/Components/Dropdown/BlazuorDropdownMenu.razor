@@ -1,0 +1,46 @@
+﻿@if (UseCustomContent)
+{
+    <div class="@(IsShow ? ("dropdown-menu " + DropdownMenuAlignmentCss + " show " + DropdownMenuCss) : ("dropdown-menu " + DropdownMenuAlignmentCss + " " + DropdownMenuCss))" style="@(IsShow ? (DropdownMenuAligmentStyle + " " + DropdownMenuStyle) : DropdownMenuStyle)">
+        @ChildContent
+    </div>
+}
+else
+{
+    <ul class="@(IsShow ? ("dropdown-menu " + DropdownMenuAlignmentCss + " show " + DropdownMenuCss) : ("dropdown-menu " + DropdownMenuAlignmentCss + " " + DropdownMenuCss))" style="@(IsShow ? (DropdownMenuAligmentStyle + " " + DropdownMenuStyle) : DropdownMenuStyle)">
+        @ChildContent
+    </ul>
+}
+
+@code {
+    [Parameter]
+    public bool UseCustomContent { get; set; } = false;
+
+    [Parameter]
+    public bool IsShow { get; set; } = false;
+
+    [Parameter]
+    public DropdownMenuAlignments DropdownMenuAlignment { get; set; } = DropdownMenuAlignments.LeftAligned;
+
+    [Parameter]
+    public string DropdownMenuCss { get; set; } = "";
+
+    [Parameter]
+    public string DropdownMenuStyle { get; set; } = "";
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    string DropdownMenuAlignmentCss => DropdownMenuAlignment switch
+    {
+        DropdownMenuAlignments.LeftAligned => "",
+        DropdownMenuAlignments.RightAligned => "dropdown-menu-end",
+        _ => ""
+    };
+
+    string DropdownMenuAligmentStyle => DropdownMenuAlignment switch
+    {
+        DropdownMenuAlignments.LeftAligned => "position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 40px);",
+        DropdownMenuAlignments.RightAligned => "position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 40px);",
+        _ => ""
+    };
+}

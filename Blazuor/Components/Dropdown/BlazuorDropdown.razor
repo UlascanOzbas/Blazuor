@@ -1,0 +1,147 @@
+﻿@inject BlazuorDropdownJsInterop BlazuorDropdownJsInterop_
+
+<div id="@BlazuorDropdownId" class="@(DropdownDirectionCss + (string.IsNullOrWhiteSpace(DropdownCss) ? "" : (" " + DropdownCss)))">
+    <BlazuorButton Variant="@Variant" Text="@Text" IconCssClass="@IconCssClass" IconPosition="@IconPosition" ChildContent="@DropdownButtonContent" Outline="@Outline" ButtonSize="@ButtonSize" ButtonCss="@((IsShow ? "dropdown-toggle show " : "dropdown-toggle ") + ButtonCss)" ButtonStyle="@ButtonStyle" @attributes="AdditionalAttributes" data-bs-toggle="dropdown" aria-expanded="@(IsShow ? true : false)" Click="OnClick" />
+    
+    <BlazuorDropdownMenu UseCustomContent="@UseCustomContent" IsShow="@IsShow" DropdownMenuCss="@DropdownMenuCss" DropdownMenuStyle="@DropdownMenuStyle">
+        @DropdownMenuContent
+    </BlazuorDropdownMenu>
+</div>
+
+@code {
+    private string BlazuorDropdownId { get; set; } = "BlazuorDropdown-" + Guid.NewGuid().ToString();
+    private DotNetObjectReference<BlazuorDropdown>? BlazuorDropdownRef;
+
+    [Parameter]
+    public Variant Variant { get; set; } = Variant.Primary;
+
+    [Parameter]
+    public string Text { get; set; } = "";
+
+    [Parameter]
+    public string IconCssClass { get; set; } = "";
+
+    [Parameter]
+    public IconPositions IconPosition { get; set; } = IconPositions.BeforeText;
+
+    [Parameter]
+    public RenderFragment? DropdownButtonContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? DropdownMenuContent { get; set; }
+
+    [Parameter]
+    public bool Outline { get; set; } = false;
+
+    [Parameter]
+    public ButtonSizes ButtonSize { get; set; } = ButtonSizes.Md;
+
+    [Parameter]
+    public string ButtonCss { get; set; } = "";
+
+    [Parameter]
+    public string ButtonStyle { get; set; } = "";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    [Parameter]
+    public EventCallback Click { get; set; }
+
+    [Parameter]
+    public string DropdownCss { get; set; } = "";
+
+    [Parameter]
+    public DropdownDirections DropdownDirection { get; set; } = DropdownDirections.Dropdown;
+
+    [Parameter]
+    public DropdownMenuAlignments DropdownMenuAlignment { get; set; } = DropdownMenuAlignments.LeftAligned;
+
+    [Parameter]
+    public string DropdownMenuCss { get; set; } = "";
+
+    [Parameter]
+    public string DropdownMenuStyle { get; set; } = "";
+
+    [Parameter]
+    public bool IsShow { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<bool> IsShowChanged { get; set; }
+
+    [Parameter]
+    public bool UseCustomContent { get; set; } = false;
+
+    string VariantCss => Variant switch
+    {
+        Variant.Primary => "btn" + (Outline ? "-outline-" : "-") + "primary",
+        Variant.Secondary => "btn" + (Outline ? "-outline-" : "-") + "secondary",
+        Variant.Success => "btn" + (Outline ? "-outline-" : "-") + "success",
+        Variant.Danger => "btn" + (Outline ? "-outline-" : "-") + "danger",
+        Variant.Warning => "btn" + (Outline ? "-outline-" : "-") + "warning",
+        Variant.Info => "btn" + (Outline ? "-outline-" : "-") + "info",
+        Variant.Light => "btn" + (Outline ? "-outline-" : "-") + "light",
+        Variant.Dark => "btn" + (Outline ? "-outline-" : "-") + "dark",
+        _ => ""
+    };
+
+    string ButtonSizeCss => ButtonSize switch
+    {
+        ButtonSizes.Lg => "btn-lg",
+        ButtonSizes.Md => "",
+        ButtonSizes.Sm => "btn-sm",
+        _ => ""
+    };
+
+    string DropdownDirectionCss => DropdownDirection switch
+    {
+        DropdownDirections.Dropdown => "dropdown",
+        DropdownDirections.DropdownCentered => "dropdown-center",
+        DropdownDirections.Dropup => "dropup",
+        DropdownDirections.DropupCentered => "dropup-center",
+        DropdownDirections.Dropend => "dropend",
+        DropdownDirections.Dropstart => "dropstart",
+        _ => ""
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            BlazuorDropdownRef = DotNetObjectReference.Create(this);
+
+            await BlazuorDropdownJsInterop_.RegisterBlazuorDropdownOutsideClick(BlazuorDropdownId, BlazuorDropdownRef);
+        }
+    }
+
+    private async Task OnClick()
+    {
+        IsShow = !IsShow;
+
+        await InvokeAsync(StateHasChanged);
+
+        await IsShowChanged.InvokeAsync(IsShow);
+
+        await Click.InvokeAsync();
+    }
+
+    [JSInvokable]
+    public async Task BlazuorDropdownClose()
+    {
+        IsShow = false;
+
+        await InvokeAsync(StateHasChanged);
+
+        await IsShowChanged.InvokeAsync(IsShow);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await BlazuorDropdownJsInterop_.UnregisterBlazuorDropdownOutsideClick(BlazuorDropdownId);
+
+        if (BlazuorDropdownRef != null)
+        {
+            BlazuorDropdownRef.Dispose();
+        }
+    }
+}

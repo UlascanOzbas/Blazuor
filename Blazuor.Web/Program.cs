@@ -1,10 +1,13 @@
+using Blazuor;
 using Blazuor.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+
+// Add Blazuor services
+builder.Services.AddBlazuor();
 
 var app = builder.Build();
 

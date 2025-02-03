@@ -1,0 +1,79 @@
+﻿<li>
+    @if (IsDivider)
+    {
+        <li><hr class="dropdown-divider"></li>
+    }
+    else
+    {
+        <a class="@(Active ? ("dropdown-item active " + ItemCss) : (Disabled ? ("dropdown-item disabled " + ItemCss) : ("dropdown-item " + ItemCss)))" style="@ItemStyle" @attributes="AdditionalAttributes" href="@NavigateUrl" @onclick="@OnClick" aria-disabled="@(Disabled ? true : false)" aria-current="@(Active ? true : false)">
+            @if (ChildContent != null)
+            {
+                @ChildContent
+            }
+            else
+            {
+                @if (!string.IsNullOrWhiteSpace(IconCssClass))
+                {
+                    @if (IconPosition == IconPositions.BeforeText)
+                    {
+                    <i class="@IconCssClass" style="margin-right: 0.25rem;"></i> @Text
+                    }
+                    else
+                    {
+                        @Text <i class="@IconCssClass" style="margin-left: 0.25rem;"></i>
+                    }
+                }
+                else
+                {
+                    @Text
+                }
+            }
+        </a>
+    }
+</li>
+
+@code {
+    [Parameter]
+    public string Text { get; set; } = "";
+
+    [Parameter]
+    public string IconCssClass { get; set; } = "";
+
+    [Parameter]
+    public IconPositions IconPosition { get; set; } = IconPositions.BeforeText;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string ItemCss { get; set; } = "";
+
+    [Parameter]
+    public string ItemStyle { get; set; } = "";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    [Parameter]
+    public string NavigateUrl { get; set; } = "";
+
+    [Parameter]
+    public bool IsDivider { get; set; } = false;
+
+    [Parameter]
+    public EventCallback Click { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
+    [Parameter]
+    public bool Active { get; set; } = false;
+
+    private async Task OnClick()
+    {
+        if (string.IsNullOrWhiteSpace(NavigateUrl))
+        {
+            await Click.InvokeAsync();
+        }
+    }
+}

@@ -1,0 +1,123 @@
+@if (!string.IsNullOrWhiteSpace(NavigateUrl))
+{
+    <a id="@BlazuorButtonId" href="@NavigateUrl" class="btn @VariantCss @ButtonSizeCss @ButtonCss" style="@ButtonStyle" @attributes="AdditionalAttributes">
+
+        @if (ChildContent != null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @if (!string.IsNullOrWhiteSpace(IconCssClass))
+            {
+                @if (IconPosition == IconPositions.BeforeText)
+                {
+                    <i class="@IconCssClass" style="margin-right: 0.25rem;"></i> @Text
+                }
+                else
+                {
+                    @Text <i class="@IconCssClass" style="margin-left: 0.25rem;"></i>
+                }
+            }
+            else
+            {
+                @Text
+            }
+        }
+    </a>
+}
+else
+{
+    <button id="@BlazuorButtonId" type="button" class="btn @VariantCss @ButtonSizeCss @ButtonCss" style="@ButtonStyle" @attributes="AdditionalAttributes" @onclick="OnClick">
+    
+        @if (ChildContent != null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @if (!string.IsNullOrWhiteSpace(IconCssClass))
+            {
+                @if (IconPosition == IconPositions.BeforeText)
+                {
+                    <i class="@IconCssClass" style="margin-right: 0.25rem;"></i> @Text
+                }
+                else
+                {
+                    @Text <i class="@IconCssClass" style="margin-left: 0.25rem;"></i>
+                }
+            }
+            else
+            {
+                @Text
+            }
+        }
+    </button>
+}
+
+
+@code {
+    private string BlazuorButtonId { get; set; } = "BlazuorButton-" + Guid.NewGuid().ToString();
+
+    [Parameter]
+    public Variant Variant { get; set; } = Variant.Primary;
+
+    [Parameter]
+    public string Text { get; set; } = "";
+
+    [Parameter]
+    public string IconCssClass { get; set; } = "";
+
+    [Parameter]
+    public IconPositions IconPosition { get; set; } = IconPositions.BeforeText;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public bool Outline { get; set; } = false;
+
+    [Parameter]
+    public ButtonSizes ButtonSize { get; set; } = ButtonSizes.Md;
+
+    [Parameter]
+    public string ButtonCss { get; set; } = "";
+
+    [Parameter]
+    public string ButtonStyle { get; set; } = "";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    [Parameter]
+    public string NavigateUrl { get; set; } = "";
+
+    [Parameter]
+    public EventCallback Click { get; set; }
+
+    string VariantCss => Variant switch
+    {
+        Variant.Primary => "btn" + (Outline ? "-outline-" : "-") + "primary",
+        Variant.Secondary => "btn" + (Outline ? "-outline-" : "-") + "secondary",
+        Variant.Success => "btn" + (Outline ? "-outline-" : "-") + "success",
+        Variant.Danger => "btn" + (Outline ? "-outline-" : "-") + "danger",
+        Variant.Warning => "btn" + (Outline ? "-outline-" : "-") + "warning",
+        Variant.Info => "btn" + (Outline ? "-outline-" : "-") + "info",
+        Variant.Light => "btn" + (Outline ? "-outline-" : "-") + "light",
+        Variant.Dark => "btn" + (Outline ? "-outline-" : "-") + "dark",
+        _ => ""
+    };
+
+    string ButtonSizeCss => ButtonSize switch
+    {
+        ButtonSizes.Lg => "btn-lg",
+        ButtonSizes.Md => "",
+        ButtonSizes.Sm => "btn-sm",
+        _ => ""
+    };
+
+    private async Task OnClick()
+    {
+        await Click.InvokeAsync();
+    }
+}
