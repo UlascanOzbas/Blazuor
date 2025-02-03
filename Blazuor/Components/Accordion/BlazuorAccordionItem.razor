@@ -1,0 +1,61 @@
+﻿@inherits ComponentBase
+
+<div class="accordion-item">
+	<h2 class="accordion-header">
+		<button class="accordion-button @(IsShow ? "" : "collapsed") " type="button" data-bs-toggle="collapse" data-bs-target="#@BlazuorAccordionItemId" aria-expanded="false" aria-controls="@BlazuorAccordionItemId" @onclick="OnClick">
+			@Text
+		</button>
+	</h2>
+	<div id="@BlazuorAccordionItemId" class="accordion-collapse collapse @(IsShow ? "show" : "")" data-bs-parent="#@BlazuorAccordionId">
+		<div class="accordion-body">
+			@ChildContent
+		</div>
+	</div>
+</div>
+
+@code {
+	private string BlazuorAccordionItemId { get; set; } = "BlazuorAccordionItem-" + Guid.NewGuid().ToString();
+
+	[CascadingParameter]
+	public BlazuorAccordion? ParentAccordion { get; set; }
+
+	public string BlazuorAccordionId { get; set; } = "";
+
+	[Parameter]
+	public string Name { get; set; } = "";
+
+	[Parameter]
+	public string Text { get; set; } = "Accordion Item";
+
+	[Parameter]
+	public RenderFragment? ChildContent { get; set; }
+
+	[Parameter]
+	public bool IsShow { get; set; } = false;
+
+	public Func<BlazuorAccordionItem, Task>? OnClickCallback { get; set; }
+
+	protected override void OnInitialized()
+	{
+		ParentAccordion?.RegisterBlazuorAccordionItem(this);
+	}
+
+	private async Task OnClick()
+	{
+		IsShow = !IsShow;
+
+		if (OnClickCallback is not null)
+		{
+			await OnClickCallback.Invoke(this);
+		}
+
+		await InvokeAsync(StateHasChanged);
+	}
+
+	public async Task SetIsShow(bool IsShowTemp)
+	{
+		IsShow = IsShowTemp;
+
+		await InvokeAsync(StateHasChanged);
+	}
+}
