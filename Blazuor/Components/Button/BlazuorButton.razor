@@ -8,15 +8,15 @@
         }
         else
         {
-            @if (!string.IsNullOrWhiteSpace(IconCssClass))
+            @if (!string.IsNullOrWhiteSpace(IconCssName))
             {
                 @if (IconPosition == IconPositions.BeforeText)
                 {
-                    <i class="@IconCssClass" style="margin-right: 0.25rem;"></i> @Text
+                    <BlazuorIcon IconName="@IconCssName" IconStyle="margin-right: 0.25rem;" /> @Text
                 }
                 else
                 {
-                    @Text <i class="@IconCssClass" style="margin-left: 0.25rem;"></i>
+                    @Text <BlazuorIcon IconName="@IconCssName" IconStyle="margin-left: 0.25rem;" />
                 }
             }
             else
@@ -36,15 +36,15 @@ else
         }
         else
         {
-            @if (!string.IsNullOrWhiteSpace(IconCssClass))
+            @if (!string.IsNullOrWhiteSpace(IconCssName))
             {
                 @if (IconPosition == IconPositions.BeforeText)
                 {
-                    <i class="@IconCssClass" style="margin-right: 0.25rem;"></i> @Text
+                    <BlazuorIcon IconName="@IconCssName" IconStyle="margin-right: 0.25rem;" /> @Text
                 }
                 else
                 {
-                    @Text <i class="@IconCssClass" style="margin-left: 0.25rem;"></i>
+                    @Text <BlazuorIcon IconName="@IconCssName" IconStyle="margin-left: 0.25rem;" />
                 }
             }
             else
@@ -66,7 +66,7 @@ else
     public string Text { get; set; } = "";
 
     [Parameter]
-    public string IconCssClass { get; set; } = "";
+    public string IconCssName { get; set; } = "";
 
     [Parameter]
     public IconPositions IconPosition { get; set; } = IconPositions.BeforeText;
