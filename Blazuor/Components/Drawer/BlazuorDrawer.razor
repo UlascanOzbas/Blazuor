@@ -1,0 +1,87 @@
+﻿<div class="blazuor-drawer @DrawerCssClass">
+    @if (DrawerPosition == DrawerPositions.Left)
+    {
+        <div class="blazuor-drawer-sidebar @(IsShow ? "show" : "hide") @SidebarCss" style="width: @(IsShow ? SidebarWidth : "0px"); @SidebarStyle">
+            @if (HeaderContent != null)
+            {
+                <div class="@HeaderCss" style="@HeaderStyle">
+                    @HeaderContent
+                </div>
+            }
+
+            <div class="">
+                @BodyContent
+            </div>
+
+            <div class="">
+                @FooterContent
+            </div>
+        </div>
+        <div class="blazuor-drawer-content @TargetCss" style="width: @(IsShow ? "calc(100% - " + SidebarWidth + ")" : "100%"); @TargetStyle">
+            @TargetContent
+        </div>
+    }
+    else
+    {
+        <div class="blazuor-drawer-content @TargetCss" style="width: @(IsShow ? "calc(100% - " + SidebarWidth + ")" : "100%"); @TargetStyle">
+            @TargetContent
+        </div>
+        <div class="blazuor-drawer-sidebar right @(IsShow ? "show" : "hide") @SidebarCss" style="width: @(IsShow ? SidebarWidth : "0px"); @SidebarStyle">
+            <div class="@HeaderCss" style="@HeaderStyle">
+                @HeaderContent
+            </div>
+
+            <div class="">
+                @BodyContent
+            </div>
+
+            <div class="">
+                @FooterContent
+            </div>
+        </div>
+    }   
+</div>
+
+@code {
+    [Parameter]
+    public bool IsShow { get; set; } = true;
+
+    [Parameter]
+    public string DrawerCssClass { get; set; } = "";
+
+    [Parameter]
+    public string SidebarWidth { get; set; } = "20%";
+
+    [Parameter]
+    public string SidebarCss { get; set; } = "";
+
+    [Parameter]
+    public string SidebarStyle { get; set; } = "";
+
+    [Parameter]
+    public RenderFragment? HeaderContent { get; set; }
+
+    [Parameter]
+    public string HeaderCss { get; set; } = "";
+
+    [Parameter]
+    public string HeaderStyle { get; set; } = "";
+
+    [Parameter]
+    public RenderFragment? BodyContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? FooterContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? TargetContent { get; set; }
+
+    [Parameter]
+    public string TargetCss { get; set; } = "";
+
+    [Parameter]
+    public string TargetStyle { get; set; } = "";
+
+    [Parameter]
+    public DrawerPositions DrawerPosition { get; set; } = DrawerPositions.Left;
+}
