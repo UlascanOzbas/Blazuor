@@ -9,6 +9,5 @@ public enum Variant
     Warning,
     Info,
     Light,
-    Dark,
-    Custom
+    Dark
 }
