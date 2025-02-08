@@ -9,6 +9,6 @@ public static class ConfigureService
     {
         services.AddScoped<BlazuorDropdownJsInterop>();
 
-        return services;
+		return services;
     }
 }
