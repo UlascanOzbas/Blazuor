@@ -1,0 +1,62 @@
+﻿<div id="@BlazuorOffcanvasId" class="offcanvas offcanvas-@Position.ToString().ToLower() @(IsShow ? "show" : "")" style="@GetOffcanvasSizeStyle()" aria-labelledby="@BlazuorOffcanvasId + 'Label'">
+	@if (HeaderContent != null)
+	{
+		<div class="offcanvas-header">
+			@HeaderContent
+		</div>
+	}
+
+	@if (BodyContent != null)
+	{
+		<div class="offcanvas-body">
+			@BodyContent
+		</div>
+	}
+
+	@if (FooterContent != null)
+	{
+		<div class="offcanvas-footer">
+			@FooterContent
+		</div>
+	}
+</div>
+
+@code {
+	private string BlazuorOffcanvasId { get; set; } = "BlazuorOffcanvas-" + Guid.NewGuid().ToString();
+
+	[Parameter]
+	public bool IsShow { get; set; } = false;
+
+	[Parameter]
+	public EventCallback<bool> IsShowChanged { get; set; }
+
+	[Parameter]
+	public OffcanvasPosition Position { get; set; } = OffcanvasPosition.Start;
+
+	[Parameter]
+	public RenderFragment? HeaderContent { get; set; }
+
+	[Parameter]
+	public RenderFragment? BodyContent { get; set; }
+
+	[Parameter]
+	public RenderFragment? FooterContent { get; set; }
+
+	[Parameter]
+	public string Width { get; set; } = "300px";
+	[Parameter]
+	public string Height { get; set; } = "300px";
+
+	private string GetOffcanvasSizeStyle()
+	{
+		return Position switch
+		{
+			OffcanvasPosition.Start => "width: " + Width + ";",
+			OffcanvasPosition.End => "width: " + Width + ";",
+			OffcanvasPosition.Top => "height: " + Height + ";",
+			OffcanvasPosition.Bottom => "height: " + Height + ";",
+			_ => ""
+		};
+	}
+
+}
