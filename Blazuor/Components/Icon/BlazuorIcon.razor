@@ -1,5 +1,66 @@
-﻿<h3>BlazuorIcon</h3>
+﻿<i class="@CssClass()" style="@IconStyle" title="@IconTooltip"></i>
 
 @code {
+    [Parameter] 
+    public string IconName { get; set; } = "";
 
+    [Parameter] 
+    public IconVariants IconVariant { get; set; } = IconVariants.None;
+
+    [Parameter]
+    public string IconCss { get; set; } = "";
+
+    [Parameter] 
+    public string IconStyle { get; set; } = "";
+
+    [Parameter]
+    public string IconTooltip { get; set; } = "";
+
+    string IconVariantCss => IconVariant switch
+    {
+        IconVariants.Primary => "text-primary",
+        IconVariants.Secondary => "text-secondary",
+        IconVariants.Success => "text-success",
+        IconVariants.Danger => "text-danger",
+        IconVariants.Warning => "text-warning",
+        IconVariants.Info => "text-info",
+        IconVariants.Light => "text-light",
+        IconVariants.Dark => "text-dark",
+        IconVariants.Body => "text-body",
+        IconVariants.Muted => "text-muted",
+        IconVariants.White => "text-white",
+        IconVariants.None => "",
+        _ => ""
+    };
+
+    private string CssClass()
+    {
+        string CssClass = string.IsNullOrEmpty(IconName) ? "" : "bi bi-" + IconName.ToLower();
+
+        if (!string.IsNullOrEmpty(IconVariantCss))
+        {
+            if (CssClass.Substring((CssClass.Length - 2), 1) == " ")
+            {
+                CssClass += IconVariantCss;
+            }
+            else
+            {
+                CssClass += " " + IconVariantCss;
+            }
+        }
+
+        if (!string.IsNullOrEmpty(IconCss))
+        {
+            if (CssClass.Substring((CssClass.Length - 2), 1) == " ")
+            {
+                CssClass += IconCss;
+            }
+            else
+            {
+                CssClass += " " + IconCss;
+            }
+        }
+
+        return CssClass;
+    }
 }
