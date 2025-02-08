@@ -1,0 +1,32 @@
+﻿<nav aria-label="breadcrumb" style="@(BreadcrumbDividerMode == BreadcrumbDividerModes.Character ? "--bs-breadcrumb-divider: '"+ @DividerValue +"'" : (BreadcrumbDividerMode == BreadcrumbDividerModes.Image ? "--bs-breadcrumb-divider: url('" + @DividerValue + "')" : "--bs-breadcrumb-divider: '"+ @DividerValue +"'"))">
+    <ol class="breadcrumb">
+        @if (Items is not null && Items.Count > 0)
+        {
+            @for (int i = 0; i < Items.Count; i++)
+            {
+                <li class="breadcrumb-item @(Items[i].IsCurrentPage ? "active" : "")" aria-current="@(Items[i].IsCurrentPage ? "page" : "")">  
+
+                    @if (!string.IsNullOrEmpty(Items[i].Href) && !Items[i].IsCurrentPage)
+                    {
+                        <a href="@Items[i].Href">@Items[i].Text</a>
+                    }
+                    else
+                    {
+                        @Items[i].Text
+                    }
+                </li>
+            }
+        }
+    </ol>
+</nav>
+
+@code {
+    [Parameter]
+    public List<Models.BreadcrumbItem> Items { get; set; } = [];
+
+    [Parameter]
+    public BreadcrumbDividerModes BreadcrumbDividerMode { get; set; } = BreadcrumbDividerModes.Character;
+
+    [Parameter]
+    public string DividerValue {get; set; } = "";
+}
