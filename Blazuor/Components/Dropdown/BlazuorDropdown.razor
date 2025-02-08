@@ -10,6 +10,7 @@
 
 @code {
     private string BlazuorDropdownId { get; set; } = "BlazuorDropdown-" + Guid.NewGuid().ToString();
+
     private DotNetObjectReference<BlazuorDropdown>? BlazuorDropdownRef;
 
     [Parameter]
@@ -72,18 +73,8 @@
     [Parameter]
     public bool UseCustomContent { get; set; } = false;
 
-    string VariantCss => Variant switch
-    {
-        Variant.Primary => "btn" + (Outline ? "-outline-" : "-") + "primary",
-        Variant.Secondary => "btn" + (Outline ? "-outline-" : "-") + "secondary",
-        Variant.Success => "btn" + (Outline ? "-outline-" : "-") + "success",
-        Variant.Danger => "btn" + (Outline ? "-outline-" : "-") + "danger",
-        Variant.Warning => "btn" + (Outline ? "-outline-" : "-") + "warning",
-        Variant.Info => "btn" + (Outline ? "-outline-" : "-") + "info",
-        Variant.Light => "btn" + (Outline ? "-outline-" : "-") + "light",
-        Variant.Dark => "btn" + (Outline ? "-outline-" : "-") + "dark",
-        _ => ""
-    };
+    string VariantCss => "btn " + (Outline ? "btn-outline-" : "btn-") + Variant.ToString().ToLower();
+
 
     string ButtonSizeCss => ButtonSize switch
     {
